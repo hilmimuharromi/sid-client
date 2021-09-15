@@ -57,7 +57,7 @@ tr:nth-child(even) {
         height: 32px;
         width: 70px;
     margin: 16px;
-    background: #000
+    /* background: #000 */
 }
 
     .site-layout .site-layout-background {
@@ -65,5 +65,6 @@ tr:nth-child(even) {
 }
 
 .button-primary {
-  background-color: black; color: #fff
+  background-color: black; color: #fff;
+  width: 200;
 }

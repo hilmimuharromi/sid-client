@@ -1,14 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Form, Input, Button, Checkbox, Row, Card } from 'antd';
 import { Link, useHistory } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {SetUser} from '../stores/action'
 
-const Login = () => {
+
+const Login = (props) => {
     const history = useHistory();
+    const {dataUser, SetUser} = props
 
-
+    useEffect(() => {
+        if(dataUser.token){
+            history.push('/')
+        }
+    }, [dataUser])
     const onFinish = (values) => {
-        localStorage.setItem('username', values.email);
+        // localStorage.setItem('username', values.email);
         console.log('Success: ===>', values);
+        SetUser(`${values.email}`)
         history.push('/')
     };
 
@@ -76,4 +85,16 @@ const Login = () => {
     )
 }
 
-export default Login
+const mapStateToProps = state => {
+    const {User} = state;
+
+    return {
+        dataUser: User
+    }
+}
+
+const mapDispatchToProps = {
+    SetUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

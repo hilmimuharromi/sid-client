@@ -4,10 +4,10 @@ const SlideHome = () => {
     return (
         <div style={{ width: '100%', height: '50vh', display: 'flex', justifyContent: 'space-around', padding: 0, margin: 0 }}>
             <Image
-                width={200}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                height={500}
+                src="https://i.ibb.co/pJxr68D/image-removebg-preview-1.png"
             />
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginRight: '10px', padding: '50px', }}>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginRight: '10px', padding: '50px' }}>
                 <h1 style={{ fontWeight: 'bold', textAlign: 'right', fontSize: '40px', marginBottom: '50px' }}>DISCOVER TRUE TAILORING</h1>
                 <div style={{ textAlign: 'right', fontSize: '18px', marginBottom: '0' }}>
                     <p>Custom Tailored Suits, Jackets, Shirts, and trousers by choosing from more than 100+ fabrics.</p>
