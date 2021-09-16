@@ -1,5 +1,32 @@
 const initialState = {
-    data: [],
+    data: [
+            {
+                fabric: "",
+                customize: [],
+                measurement: [],
+                product: "suits"
+            },
+            {
+                fabric: "",
+                customize: [],
+                measurement: [],
+                product: "shirts"
+            },
+            {
+                fabric: "",
+                customize: [],
+                measurement: [],
+                product: "trousers"
+            },
+            {
+                fabric: "",
+                customize: [],
+                measurement: [],
+                product: "jackets"
+            },
+            
+    ],
+    
 }
 
 const CustomReducer = (state = initialState, action)  => {
@@ -39,7 +66,6 @@ const CustomReducer = (state = initialState, action)  => {
     } else if (action.type === "SET_CUSTOMIZE"){
         const {product} = action.params
         let newStateData = []
-        
         if(state.data.length === 0){
             newStateData.push({
                 product: product,
@@ -85,16 +111,66 @@ const CustomReducer = (state = initialState, action)  => {
                 })
                 
             }
-        }
-
-        console.log('customize ===>', newStateData)
-
-
+        } 
         return {
             ...state,
             data: newStateData
         }
 
+    } else if(action.type === 'SET_MEASUREMENT') {
+        console.log('REDUCER MEASUREMENT', action.payload, action.params)
+        const {product} = action.params
+        let newStateData = []
+        if(state.data.length === 0){
+            newStateData.push({
+                product: product,
+		        measurement: [action.payload],
+            })
+        } else {
+            const found = state.data.find((item) => item.product === product)
+            if(!found) {
+                newStateData = state.data
+                newStateData.push({
+                    product: product,
+                    measurement: [action.payload],
+                })
+            } else {
+                newStateData = state.data.map((p) => {
+                    if(p.product === product) {
+                        if(!p.measurement) {
+                            p.measurement = [action.payload]
+                        } else {
+                            const foundMeasurement = p.measurement.find((c) => c.name === action.payload.name)
+                            let newMeasurement = p.measurement
+                            if(!foundMeasurement) {
+                                newMeasurement.push(action.payload)
+                            } else {
+                                newMeasurement = p.measurement.map((c) => {
+                                    if(c.name === action.payload.name) {
+                                        c.value = action.payload.value
+                                    } else {
+                                        
+                                    }
+                                    return c
+                                })
+                            }
+
+                            p.measurement = newMeasurement
+
+                        }
+                        return p   
+                    } else {
+                        return p
+                    }
+                })
+                
+            }
+        } 
+        console.log(newStateData, 'new state data')
+        return {
+            ...state,
+            data: newStateData
+        }
     }
 
     return state

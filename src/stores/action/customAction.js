@@ -16,8 +16,18 @@ const SetCustomize = (data, params) => {
     }
 }
 
+const SetMeasurement = (data, params) => {
+    
+    return {
+        type: "SET_MEASUREMENT",
+        payload: data,
+        params: params
+    }
+}
+
 
 export {
     SetFabric,
-    SetCustomize
+    SetCustomize,
+    SetMeasurement
 }

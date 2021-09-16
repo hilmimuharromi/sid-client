@@ -1,8 +1,9 @@
 import {SetUser} from './userAction'
-import {SetFabric, SetCustomize} from './customAction'
+import {SetFabric, SetCustomize, SetMeasurement} from './customAction'
 
 export {
     SetUser,
     SetFabric,
-    SetCustomize
+    SetCustomize,
+    SetMeasurement
 }

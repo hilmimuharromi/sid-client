@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Image, Button, Modal, Select, Input } from 'antd'
 import { CaretRightOutlined } from '@ant-design/icons'
 import {connect} from 'react-redux'
-import {SetUser} from '../stores/action'
+import {SetUser, SetMeasurement} from '../stores/action'
 import {useParams} from 'react-router-dom'
 import {dataJacket, dataShirt, dataTrouser, dataSuit} from '../data/dataMeasurement'
 const { Option } = Select;
 
 const ManualMeasurement = (props) => {
-    const {dataUser, SetUser} = props
+    const {dataUser, SetUser, SetMeasurement, dataStore} = props
     const [viewModal, setViewModal] = useState(false)
     const [options, setOptions] = useState([])
     const [current, setCurrent] = useState({
@@ -18,6 +18,11 @@ const ManualMeasurement = (props) => {
     })
     const [modalLogin, setModalLogin] = useState(false)
     const params = useParams()
+
+    const [dataCustom, setDataCustom] = useState({})
+
+  
+
 
     useEffect(() => {
         const {product} = params
@@ -36,6 +41,30 @@ const ManualMeasurement = (props) => {
         }
     }, [params])
 
+
+    
+    useEffect(() => {
+        const filterData = dataStore.find((item) => item.product === params.product)
+        console.log(filterData, 'filter data ....')
+        setDataCustom(filterData)
+    }, [params, dataStore.length])
+
+
+
+    useEffect(() => {
+        if(dataCustom.measurement) {
+            const newOptions =  options.map((item) => {
+                const found = dataCustom.measurement.find((m) => m.name === item.name)
+                if(found) {
+                    item.value = found.value
+                }
+                return item
+            })
+            setOptions(newOptions)
+        }
+    }, [dataCustom, current])
+
+
     const onSave = () => {
         if(!dataUser.token) {
             setModalLogin(true)
@@ -46,7 +75,6 @@ const ManualMeasurement = (props) => {
     }
 
     const inputData = (e) => {
-        console.log(e.target.value)
         const newOptions = options.map((item) => {
             if(item.name === current.name){
                 item.value = e.target.value
@@ -54,6 +82,13 @@ const ManualMeasurement = (props) => {
             return item
         })
         setOptions(newOptions)
+
+        const payload = {
+            ...current, value: e.target.value
+        }
+        SetMeasurement(payload, params)
+        // console.log(payload, params)
+
 
     }
     return (
@@ -66,7 +101,7 @@ const ManualMeasurement = (props) => {
             </Row>
             <Row justify="center" style={{margin: 20}}>
                 <Col span={8}>
-                    <iframe width="100%" height="350" src={'https://www.youtube.com/embed/_PU-5WbBqT4'} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe width="100%" height="350" src={current.url} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </Col>
                 <Col span={2}>
                 {
@@ -78,6 +113,7 @@ const ManualMeasurement = (props) => {
                 }
                 </Col>
             </Row>
+            {JSON.stringify(dataCustom)}
             <Row justify="center">
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', alignContent: 'center' }}>
                     <h3>{current.name}</h3>
@@ -100,15 +136,17 @@ const ManualMeasurement = (props) => {
 
 
 const mapStateToProps = state => {
-    const {User} = state;
+    const {User, Custom} = state;
 
     return {
-        dataUser: User
+        dataUser: User,
+        dataStore: Custom.data
     }
 }
 
 const mapDispatchToProps = {
-    SetUser
+    SetUser,
+    SetMeasurement
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManualMeasurement)
