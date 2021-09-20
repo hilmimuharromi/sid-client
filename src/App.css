@@ -4,7 +4,8 @@ table {
   width: 100%;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
@@ -24,7 +25,7 @@ tr:nth-child(even) {
 .header {
   display: flex;
   justify-content: space-between;
-  background-color:#fff
+  background-color: #fff;
 }
 
 .footer {
@@ -38,33 +39,62 @@ tr:nth-child(even) {
 .menu {
   display: flex;
   justify-content: flex-start;
-  background-color:#fff;
+  background-color: #fff;
 }
 
- .trigger {
-    padding: 0 24px;
-    font-size: 18px;
-    line-height: 64px;
-    cursor: pointer;
-    transition: color 0.3s;
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
-  .trigger:hover {
-        color: #000;
+.trigger:hover {
+  color: #000;
 }
 
-    .logo {
-        height: 32px;
-        width: 70px;
-    margin: 16px;
-    /* background: #000 */
+.logo {
+  height: 32px;
+  width: 70px;
+  margin: 16px;
+  /* background: #000 */
 }
 
-    .site-layout .site-layout-background {
-        background: #fff;
+.site-layout .site-layout-background {
+  background: #fff;
 }
 
 .button-primary {
-  background-color: black; color: #fff;
+  background-color: black;
+  color: #fff;
   width: 200;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.border-horizontal {
+  border-style: solid;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  border-color: #fff;
+  margin: 100;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.text-low-margin {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.button-div {
+  cursor: pointer;
 }

@@ -1,17 +1,16 @@
 const initialState = {
-    token: ""
-}
+  token: "tes ada user",
+};
 
-const UserReducer = (state = initialState, action)  => {
+const UserReducer = (state = initialState, action) => {
+  if (action.type === "SET_USER") {
+    return {
+      ...state,
+      token: action.payload,
+    };
+  }
 
-    if(action.type === "SET_USER") {
-        return {
-            ...state,
-            token: action.payload
-        }
-    }
+  return state;
+};
 
-    return state
-}
-
-export default UserReducer
+export default UserReducer;
