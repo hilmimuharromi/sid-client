@@ -9,7 +9,6 @@ import Register from "./Register";
 import Home from "./Home";
 import CustomPage from "./Custom";
 import Measurement from "./Measurement";
-import ManualMeasurement from "./ManualMeasurement";
 import CheckoutPage from "./Checkout";
 import { connect } from "react-redux";
 import { SetUser } from "../stores/action";
@@ -75,9 +74,6 @@ const MainPage = (props) => {
           </Route>
           <Route path="/measurement/:product">
             <Measurement />
-          </Route>
-          <Route path="/manual-measurement/:product">
-            <ManualMeasurement />
           </Route>
           <Route path="/">
             <Home />

@@ -8,7 +8,6 @@ const SetFabric = (data, params) => {
 }
 
 const SetCustomize = (data, params) => {
-    
     return {
         type: "SET_CUSTOMIZE",
         payload: data,
@@ -26,8 +25,18 @@ const SetMeasurement = (data, params) => {
 }
 
 
+const ResetCustom = (data) => {
+    console.log('reset custom', data)
+    return {
+        type: "RESET_CUSTOM",
+        payload: data,
+    }
+
+}
+
 export {
     SetFabric,
     SetCustomize,
-    SetMeasurement
+    SetMeasurement,
+    ResetCustom
 }

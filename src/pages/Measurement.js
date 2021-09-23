@@ -3,46 +3,53 @@ import { Row, Col, Image, Button, Modal, Select } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { SetUser, SetMeasurement } from "../stores/action";
 import { connect } from "react-redux";
+import {StandardSizing, ManualMeasurement, FormLogin} from '../components'
 
-const { Option } = Select;
+
 
 const Measurement = (props) => {
-  const { dataUser, SetUser, SetMeasurement, dataStore } = props;
+  const { dataStore, dataUser } = props;
   const [viewModal, setViewModal] = useState(false);
   const history = useHistory();
   const params = useParams();
   const [dataCustom, setDataCustom] = useState("");
-  const [fit, setFit] = useState({});
-  const [size, setSize] = useState({});
+
+  const [manualView, setManualView] = useState(false)
+  const [modalLogin, setModalLogin] = useState(false)
+
 
   useEffect(() => {
     const filterData = dataStore.find(
       (item) => item.product === params.product
     );
-    console.log(filterData, "filter data ....");
     setDataCustom(filterData);
   }, [params, dataStore.length]);
 
-  useEffect(() => {
-      if(dataCustom.measurement) {
-          const foundFit = dataCustom.measurement.find((item) => item.name === 'FIT')
-          const foundSize = dataCustom.measurement.find((item) => item.name === 'SIZE')
+  if(manualView) {
+    return (
+      <ManualMeasurement setManualView={setManualView} />
+    )
+  }
 
-          if(foundFit) {
-              setFit(foundFit)
-          } if(foundSize) {
-              setSize(foundSize)
-          }
-      }
+  const onSave = () => {
+    if (!dataUser.token) {
+      setModalLogin(true);
+      return console.log("tidak bisa save");
+    } else {
+      history.push("/checkout");
+      return console.log("bisa save");
+    }
+  };
 
-  }, [fit, size, dataCustom])
-
+ 
   return (
     <>
+     <Modal visible={modalLogin} onCancel={() => setModalLogin(false)}>
+        <FormLogin />
+      </Modal>
       <Row justify="center">
         <h2>Measurement Options</h2>
       </Row>
-      {JSON.stringify(dataCustom)}
       <Row gutter={8} justify="center">
         <Col
           span={6}
@@ -67,7 +74,7 @@ const Measurement = (props) => {
               color: "#fff",
             }}
             onClick={() =>
-              history.push(`/manual-measurement/${params.product}`)
+              setManualView(true)
             }
           >
             choose
@@ -102,80 +109,21 @@ const Measurement = (props) => {
           </Button>
         </Col>
       </Row>
+      <Row justify="center" style={{marginTop: 30}}>
+        <Button style={{width: 200}}
+        onClick={onSave}
+        >Save</Button>
+      </Row>
 
-      <Modal
-        visible={viewModal}
-        footer={null}
-        onCancel={() => setViewModal(false)}
-      >
-        <h2>Standard SIZING</h2>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            alignContent: "center",
-          }}
-        >
-          <h3>CHOOSE A FIT</h3>
-          <Select
-            value={fit.value}
-            onSelect={(value) => {
-                const payload = {
-                    name: "FIT",
-                    value: value
-                }
-                SetMeasurement(payload, params)
-                setFit(payload)
-            }}
-            placeholder="FIT"
-            style={{ width: 200, marginRight: "5px" }}
-          >
-            <Option value="tight"> TIGHT</Option>
-            <Option value="fitted"> FITTED</Option>
-            <Option value="loose"> LOOSE</Option>
-          </Select>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            alignContent: "center",
-            marginBottom: 5,
-          }}
-        >
-          <h3>CHOOSE A SIZE</h3>
-          <Select
-            value={size.value}
-            onSelect={(value) => {
-                const payload = {
-                    name: "SIZE",
-                    value: value
-                }
-                SetMeasurement(payload, params)
-                setSize(payload)}}
-            placeholder="SIZE"
-            style={{ width: 200, marginRight: "5px" }}
-          >
-            <Option value="XS"> XS</Option>
-            <Option value="S"> S</Option>
-            <Option value="M"> M</Option>
-            <Option value="L"> L</Option>
-            <Option value="XL"> XL</Option>
-          </Select>
-        </div>
-
-        <Row justify="center">
-          <Button
-            className="button-primary"
-            onClick={() => setViewModal(false)}
-          >
-            Save
-          </Button>
-        </Row>
-      </Modal>
+      
+        <StandardSizing 
+        viewModal={viewModal}
+        setViewModal={setViewModal}
+        dataCustom={dataCustom}
+        params={params}
+        {...props}
+        />
+        
     </>
   );
 };

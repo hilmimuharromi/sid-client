@@ -1,8 +1,17 @@
-import { Row, Col, Image, Space, Button, Typography } from "antd";
-
+import {useState} from 'react'
+import { Row,  Image, Space, Button, Typography, Modal } from "antd";
+import { EndCustomize, TableMeasurement } from ".";
+import {useDispatch} from 'react-redux'
+import {ResetCustom} from '../stores/action'
+import {useHistory} from 'react-router-dom'
 const { Title } = Typography;
 
 const Cart = ({ dataCustom }) => {
+  const [viewCustom, setViewCustom] = useState(false)
+  const [ viewMeasurement, setViewMeasurement] = useState(false)
+  const [currenytData, setCurrentData] = useState("")
+  const dispatch = useDispatch()
+  const history = useHistory()
   const imageHandler = (product) => {
     switch (product) {
       case "suits":
@@ -19,6 +28,12 @@ const Cart = ({ dataCustom }) => {
   };
   return (
     <>
+     <Modal visible={viewCustom} onCancel={() => setViewCustom(false)} footer={null}>
+      <EndCustomize data={currenytData} />
+    </Modal>
+    <Modal visible={viewMeasurement} onCancel={() => setViewMeasurement(false)}>
+      <TableMeasurement data={currenytData.measurement} />
+    </Modal>
       {dataCustom.map((item) => (
         <Row justify="center">
           <div
@@ -49,28 +64,43 @@ const Cart = ({ dataCustom }) => {
                 <p className="text-low-margin">Category: {item.product}</p>
                 <Title level={4}>CUSTOMIZATION:</Title>
                 <Space>
-                  <Button>Edit</Button>
-                  <Button>View</Button>
+                  <Button onClick={() => {
+                    history.push(`/custom/${item.product}/fabric`)
+                  }}>Edit</Button>
+                  <Button onClick={() => {
+                    setCurrentData(item)
+                    setViewCustom(true)}}>View</Button>
                 </Space>
 
                 <Title level={4}>MEASUREMENTS:</Title>
                 <Space>
-                  <Button>Edit</Button>
-                  <Button>View</Button>
+                  <Button 
+                  onClick={() => {
+                    history.push(`/measurement/${item.product}`)
+                  }}
+                  >Edit</Button>
+                  <Button
+                  onClick={() => {
+                    setCurrentData(item)
+                    setViewMeasurement(true)}}
+                  >View</Button>
                 </Space>
               </div>
             </div>
-            <div style={{ width: "20%" }}>
               <div
                 style={{
+                  width: '100%',
                   display: "flex",
                   flexDirection: "column",
-                  marginLeft: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <h3>Rp. {item.fabric.price}</h3>
+                <Button danger style={{marginTop: 10}}
+                onClick={() => dispatch(ResetCustom(item.product))}
+                >Delete</Button>
               </div>
-            </div>
           </div>
         </Row>
       ))}

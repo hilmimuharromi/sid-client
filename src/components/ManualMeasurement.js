@@ -14,7 +14,7 @@ const { Option } = Select;
 
 const ManualMeasurement = (props) => {
   const history = useHistory();
-  const { dataUser, SetUser, SetMeasurement, dataStore } = props;
+  const { dataUser, SetUser, SetMeasurement, dataStore, setManualView } = props;
   const [viewModal, setViewModal] = useState(false);
   const [options, setOptions] = useState([]);
   const [current, setCurrent] = useState({
@@ -66,13 +66,7 @@ const ManualMeasurement = (props) => {
   }, [dataCustom, current]);
 
   const onSave = () => {
-    if (!dataUser.token) {
-      setModalLogin(true);
-      return console.log("tidak bisa save");
-    } else {
-      history.push("/checkout");
-      return console.log("bisa save");
-    }
+    setManualView(false)
   };
 
   const inputData = (e) => {

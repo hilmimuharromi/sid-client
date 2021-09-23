@@ -6,6 +6,11 @@ import Fabric from "./Fabric";
 import Customize from "./Customize";
 import EndCustomize from "./EndCustomize";
 import Cart from "./Cart";
+import Delivery from "./Delivery";
+import Payment from "./Payment";
+import StandardSizing from "./StandardSizing";
+import ManualMeasurement from "./ManualMeasurement";
+import TableMeasurement from "./TableMeasurement";
 export {
   FormLogin,
   ButtonUser,
@@ -15,4 +20,9 @@ export {
   Customize,
   EndCustomize,
   Cart,
+  Delivery,
+  Payment,
+  StandardSizing,
+  ManualMeasurement,
+  TableMeasurement
 };

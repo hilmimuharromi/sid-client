@@ -171,6 +171,26 @@ const CustomReducer = (state = initialState, action)  => {
             ...state,
             data: newStateData
         }
+    } else if(action.type === 'RESET_CUSTOM') {
+
+        console.log('masuk store', action.payload)
+
+        let newStateData = state.data.map((item) => {
+            if(action.payload === item.product) {
+                item =  {
+                    fabric: "",
+                    customize: [],
+                    measurement: [],
+                    product: action.payload
+                }
+            }
+            return item
+        })
+        return {
+            ...state,
+            data: newStateData
+        }
+
     }
 
     return state
