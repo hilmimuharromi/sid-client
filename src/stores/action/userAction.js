@@ -5,6 +5,14 @@ const SetUser = (data) => {
     }
 }
 
+const SetDelivery = (data) => {
+    return {
+        type: "SET_DELIVERY",
+        payload: data
+    }
+}
+
 export {
-    SetUser
+    SetUser,
+    SetDelivery
 }

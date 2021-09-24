@@ -120,7 +120,6 @@ const ManualMeasurement = (props) => {
           ))}
         </Col>
       </Row>
-      {JSON.stringify(dataCustom)}
       <Row justify="center">
         <div
           style={{

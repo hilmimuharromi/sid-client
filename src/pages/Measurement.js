@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Image, Button, Modal, Select } from "antd";
+import { Row, Col, Image, Button, Modal, message } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { SetUser, SetMeasurement } from "../stores/action";
 import { connect } from "react-redux";
@@ -16,6 +16,7 @@ const Measurement = (props) => {
 
   const [manualView, setManualView] = useState(false)
   const [modalLogin, setModalLogin] = useState(false)
+  const [modalValidasi, setModalValidasi] = useState(false)
 
 
   useEffect(() => {
@@ -31,19 +32,78 @@ const Measurement = (props) => {
     )
   }
 
-  const onSave = () => {
-    if (!dataUser.token) {
-      setModalLogin(true);
-      return console.log("tidak bisa save");
+  const error = () => {
+    return message.error(`you haven't filled everything up`);
+  };
+
+  const validasiMeasurement = () => {
+    let status = ''
+    let standard = false
+    let manual = false
+
+    dataCustom.measurement.map((item) => {
+    
+
+      if(item.name === 'FIT' || item.name === 'SIZE') {
+        if(item.value){
+          standard = true
+        }
+      } else {
+        if(item.value){
+          manual = true
+        }
+      }
+    })
+
+    console.log( 'standard ===', standard)
+    console.log('manual ===', manual)
+
+
+    if(!standard && !manual) {
+      status = 'error'
+    } else if(standard && manual) {
+       status = 'modal'
     } else {
-      history.push("/checkout");
-      return console.log("bisa save");
+    status = 'next'
+    }
+
+    return status
+  }
+
+  const onSave = () => {
+    
+    const status = validasiMeasurement()
+    
+    if(status === 'next') {
+      if (!dataUser.token) {
+        setModalLogin(true);
+        return console.log("tidak bisa save");
+      } else {
+        history.push("/checkout");
+        return console.log("bisa save");
+      }
+    } else if(status === 'modal') {
+      setModalValidasi(true)
+    } else if(status === 'error') {
+      error()
     }
   };
 
  
   return (
     <>
+    <Modal visible={modalValidasi} onCancel={() => setModalValidasi(false)} footer={null}>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', height: '30vh',}}>
+      <h3>
+      choose measurement option
+      </h3>
+      <div>
+      <Button style={{marginRight: 10}}>Manual</Button>
+      <Button>Standard</Button>
+      </div>
+      {JSON.stringify(dataCustom)}
+      </div>
+    </Modal>
      <Modal visible={modalLogin} onCancel={() => setModalLogin(false)}>
         <FormLogin />
       </Modal>
